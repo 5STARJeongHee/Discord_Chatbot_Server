@@ -1,9 +1,3 @@
-# 인증 처리를 위한 디스코드 Webhook 설정
-# 파일: api_server/discord_interactions/verify.py
-
-import os
-import hmac
-import hashlib
 from fastapi import Request, HTTPException
 from nacl.signing import VerifyKey
 from nacl.exceptions import BadSignatureError
