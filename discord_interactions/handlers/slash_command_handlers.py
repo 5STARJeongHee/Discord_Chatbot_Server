@@ -46,51 +46,87 @@ async def help_command():
 async def register_goal_command():
     """목표 등록용 모달 띄우기"""
     print("register_goal_command called")
-    return JSONResponse(content={
-        "type": 9,
-        "data": {
-            "title": "🎯 목표 등록",
-            "custom_id": "modal_register_goal",
-            "components": [
-                {
-                    "type": 1,
-                    "components": [{
-                        "type": 4, "custom_id": "goal_name",
-                        "style": 1, "label": "목표 이름", "required": True
-                    }]
-                },
-                {
-                    "type": 1,
-                    "components": [{
-                        "type": 4, "custom_id": "goal_category",
-                        "style": 1, "label": "카테고리", "required": True
-                    }]
-                },
-                {
-                    "type": 1,
-                    "components": [{
-                        "type": 4, "custom_id": "goal_total",
-                        "style": 1, "label": "총 목표량", "required": True
-                    }]
-                },
-                {
-    "type": 1,
-    "components": [{
-        "type": 4,
-        "custom_id": "unit",
-        "style": 1,  # Short
-        "label": "단위 (Count / Time / Day 중 선택)",
-        "required": True
-    }]
-}
-
-            ]
+    return JSONResponse(content=
+    {
+  "type": 9,
+  "data": {
+    "custom_id": "modal_register_goal",
+    "title": "🎯 목표 등록",
+    "components": [
+      {
+        "type": 18,
+        "label": "목표 이름",
+        "description": "예: 매일 30분 운동하기",
+        "component": {
+          "type": 4,
+          "custom_id": "goal_name",
+          "style": 1,
+          "min_length": 1000,
+          "max_length": 4000,
+          "placeholder": "Write your explanation here...",
+          "required": True
         }
-    })
+      },
+      {
+        "type": 18,
+        "label": "카테고리",
+        "description": "예: 매일 30분 운동하기",
+        "component": {
+          "type": 4,
+          "custom_id": "goal_category",
+          "style": 1,          
+          "placeholder": "카테고리를 입력해주세요 (예: 운동, 공부)",
+          "required": True
+        }
+      },
+      {
+        "type": 18,
+        "label": "총 목표량",
+        "description": "예: 매일 30분 운동하기",
+        "component": {
+          "type": 4,
+          "custom_id": "goal_total",
+          "style": 1,          
+          "placeholder": "총 목표량을 숫자로 입력해주세요 (예: 30)",
+          "required": True
+        }
+      },
+      {
+        "type": 18,
+        "label": "목표 단위",
+        "component": {
+          "type": 3,
+          "custom_id": "custom_unit",
+          "placeholder": "단위를 선택해주세요",
+          "options": [
+            {
+              "label": "개수",
+              "description": "1개, 2개, 3개...",
+              "value": "Count"
+            },
+            {
+              "label": "시간",
+              "value": "Time",
+              "description": "1시간, 2시간, 3시간...",
+            },
+            {
+              "label": "일",
+              "value": "Day",
+                "description": "1일, 2일, 3일..."
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
+    )
+
 
 
 async def view_goal_command(payload: dict):
     """목표 목록 가져오기 (Spring API 연동)"""
+    print("view_goal_command called")
     user_id = payload.get("member", {}).get("user", {}).get("id")
     goals = await goal_api.fetch_goals(user_id)
 
